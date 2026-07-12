@@ -1663,3 +1663,133 @@ input:focus + .input-icon-left {
     height: 12px;
     color: var(--primary);
 }
+
+/* ==========================================================================
+   Mobile-First & Responsiveness Optimizations (Screens under 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+    
+    .welcome-hero-card {
+        padding: 20px 15px;
+        text-align: center;
+    }
+    
+    .welcome-hero-card h1 {
+        font-size: 24px;
+    }
+    
+    .hero-desc {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    
+    .flight-tracker-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .flight-tracker-title h2 {
+        font-size: 18px;
+    }
+    
+    .flight-search-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-flight-btn {
+        width: 100%;
+    }
+    
+    .app-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .map-card {
+        height: 350px;
+    }
+    
+    /* Confirmation modal adjustments */
+    .modal-content {
+        padding: 20px 15px;
+    }
+    
+    .confirm-header h2 {
+        font-size: 18px;
+    }
+    
+    .modal-promo-buttons {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .promo-buttons-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        text-align: center;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .logo-container {
+        flex-direction: column;
+        gap: 6px;
+    }
+    
+    .logo-text h1 {
+        font-size: 20px;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        align-items: center;
+    }
+    
+    .install-btn, .lang-switcher {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .lang-btn {
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .vehicle-options {
+        gap: 6px;
+    }
+    
+    .vehicle-card-content {
+        padding: 8px 4px;
+    }
+    
+    .vehicle-name {
+        font-size: 11px;
+    }
+    
+    .vehicle-icon {
+        width: 16px;
+        height: 16px;
+        margin-bottom: 4px;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
