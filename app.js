@@ -1371,7 +1371,7 @@ function showBookingConfirmation() {
     const fallbackOrderId = `TX-${Math.floor(1000 + Math.random() * 9000)}`;
     document.getElementById("confOrderId").textContent = `#${fallbackOrderId} (Demo)`;
 
-    fetch('http://localhost:3000/api/booking', {
+    fetch('/api/booking', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
