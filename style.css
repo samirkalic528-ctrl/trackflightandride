@@ -1,0 +1,1665 @@
+/* ==========================================================================
+   City Taxi Theme & Global Variables
+   ========================================================================== */
+:root {
+    --bg-dark: #0a0c10;
+    --bg-card: rgba(22, 26, 34, 0.65);
+    --bg-card-sub: rgba(30, 36, 48, 0.5);
+    --primary: #ffb700;
+    --primary-hover: #e5a400;
+    --primary-glow: rgba(255, 183, 0, 0.35);
+    --secondary: #202634;
+    --secondary-hover: #2b3346;
+    --text-main: #f0f4f8;
+    --text-muted: #8a99ad;
+    --accent-blue: #00adb5;
+    --accent-red: #e23e57;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(255, 183, 0, 0.5);
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --shadow-main: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Base Styles
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    overflow-x: hidden;
+    background-image: 
+        radial-gradient(at 10% 10%, rgba(255, 183, 0, 0.05) 0px, transparent 50%),
+        radial-gradient(at 90% 90%, rgba(0, 173, 181, 0.05) 0px, transparent 50%);
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Header Styles
+   ========================================================================== */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 25px 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.logo-icon i {
+    width: 26px;
+    height: 26px;
+    stroke-width: 2.2;
+}
+
+.logo-text h1 {
+    font-family: var(--font-title);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    line-height: 1.1;
+}
+
+.logo-text h1 span {
+    color: var(--primary);
+    text-shadow: 0 0 10px rgba(255, 183, 0, 0.2);
+}
+
+.logo-text p {
+    color: var(--text-muted);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.settings-btn {
+    background: var(--secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.settings-btn:hover {
+    background: var(--secondary-hover);
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 0 12px var(--primary-glow);
+    transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   Layout Grid
+   ========================================================================== */
+.app-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .app-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================================================
+   Card Styling (Glassmorphism)
+   ========================================================================== */
+.card {
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    box-shadow: var(--shadow-main);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass {
+    background: var(--bg-card);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+}
+
+.glass-sub {
+    background: var(--bg-card-sub);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+}
+
+.section-title {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-title i {
+    color: var(--primary);
+}
+
+/* ==========================================================================
+   Form Controls
+   ========================================================================== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group.col {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="password"],
+select {
+    width: 100%;
+    background-color: var(--bg-card-sub);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 12px 16px;
+    font-size: 15px;
+    font-family: var(--font-body);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: var(--transition);
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: rgba(138, 153, 173, 0.5);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 8px rgba(255, 183, 0, 0.15);
+    background-color: rgba(30, 36, 48, 0.8);
+}
+
+/* Select wrapper styling */
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.select-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* Icons inside Inputs */
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon-wrapper input {
+    padding-left: 45px;
+}
+
+.input-icon-left {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+    transition: var(--transition);
+}
+
+input:focus + .input-icon-left {
+    color: var(--primary);
+}
+
+/* Vehicle Selector cards */
+.vehicle-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.vehicle-card {
+    cursor: pointer;
+}
+
+.vehicle-card input[type="radio"] {
+    display: none;
+}
+
+.vehicle-card-content {
+    background: var(--bg-card-sub);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: var(--transition);
+    height: 100%;
+}
+
+.vehicle-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    transition: var(--transition);
+}
+
+.vehicle-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-main);
+}
+
+.vehicle-desc {
+    font-size: 10px;
+    color: var(--text-muted);
+}
+
+.vehicle-card:hover .vehicle-card-content {
+    border-color: rgba(255, 183, 0, 0.3);
+    background: rgba(30, 36, 48, 0.7);
+}
+
+.vehicle-card input[type="radio"]:checked + .vehicle-card-content {
+    border-color: var(--primary);
+    background: rgba(255, 183, 0, 0.08);
+    box-shadow: inset 0 0 10px rgba(255, 183, 0, 0.1);
+}
+
+.vehicle-card input[type="radio"]:checked + .vehicle-card-content .vehicle-icon {
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+/* Input + Button Row */
+.input-btn-row {
+    display: flex;
+    gap: 10px;
+}
+
+.flex-grow {
+    flex-grow: 1;
+}
+
+.input-help {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.primary-btn,
+.secondary-btn {
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 15px;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: var(--transition);
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: #000;
+    box-shadow: 0 4px 15px rgba(255, 183, 0, 0.2);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 183, 0, 0.35);
+}
+
+.primary-btn:active {
+    transform: translateY(0);
+}
+
+.secondary-btn {
+    background: var(--secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+}
+
+.secondary-btn:hover {
+    background: var(--secondary-hover);
+    border-color: var(--text-muted);
+}
+
+.submit-booking-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px;
+    font-size: 16px;
+}
+
+.btn-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* ==========================================================================
+   Price Display Card
+   ========================================================================== */
+.price-display-card {
+    background: linear-gradient(135deg, rgba(255, 183, 0, 0.08) 0%, rgba(22, 26, 34, 0.8) 100%);
+    border: 1px dashed var(--primary);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-amount {
+    font-family: var(--font-title);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary);
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+}
+
+.price-amount .currency {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.price-tag-badge {
+    background: var(--primary);
+    color: #000;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Flight & Weather Dashboard Card
+   ========================================================================== */
+.flight-weather-card {
+    margin-bottom: 25px;
+}
+
+.flight-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.flight-panel-header h3 {
+    font-family: var(--font-title);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.flight-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.flight-badge.ontime {
+    background: rgba(0, 173, 181, 0.15);
+    color: var(--accent-blue);
+    border: 1px solid rgba(0, 173, 181, 0.3);
+}
+
+.flight-badge.delayed {
+    background: rgba(226, 62, 87, 0.15);
+    color: var(--accent-red);
+    border: 1px solid rgba(226, 62, 87, 0.3);
+}
+
+.flight-info-banner {
+    background: var(--bg-card-sub);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.flight-route-visual {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.airport-point {
+    display: flex;
+    flex-direction: column;
+}
+
+.airport-point:last-child {
+    text-align: right;
+}
+
+.airport-code {
+    font-family: var(--font-title);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.airport-city {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.plane-line {
+    flex-grow: 1;
+    margin: 0 20px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plane-line-dot {
+    position: absolute;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 8px var(--primary);
+}
+
+.plane-line i {
+    width: 18px;
+    height: 18px;
+    color: var(--primary);
+    background: var(--bg-dark);
+    padding: 2px;
+    transform: rotate(90deg);
+}
+
+.flight-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.flight-times span {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+/* Weather widgets grid */
+.weather-widgets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.weather-widget {
+    padding: 15px;
+}
+
+.widget-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.weather-icon-container i {
+    width: 32px;
+    height: 32px;
+}
+
+.weather-temp {
+    font-family: var(--font-title);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.weather-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.text-yellow {
+    color: var(--primary);
+}
+
+/* Delay warning and sync box */
+.delay-notice-box {
+    background: rgba(226, 62, 87, 0.08);
+    border: 1px solid rgba(226, 62, 87, 0.25);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.warning-icon {
+    color: var(--accent-red);
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.delay-notice-text {
+    flex-grow: 1;
+    font-size: 13px;
+}
+
+.delay-notice-text strong {
+    color: var(--accent-red);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.delay-notice-text p {
+    color: var(--text-muted);
+}
+
+.highlight-time {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.sync-action-btn {
+    background: var(--accent-red);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.sync-action-btn:hover {
+    background: #c9354b;
+    box-shadow: 0 0 10px rgba(226, 62, 87, 0.3);
+}
+
+.sync-action-btn i {
+    width: 12px;
+    height: 12px;
+}
+
+/* ==========================================================================
+   Map Card and Mock Map SVG
+   ========================================================================== */
+.map-card {
+    height: 520px;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.map-card-header h3 {
+    font-family: var(--font-title);
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.map-card-header h3 i {
+    color: var(--primary);
+}
+
+.mode-badge {
+    background: var(--secondary);
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.map-container-wrapper {
+    flex-grow: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+#leafletMap,
+#mockMap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.free-map-badge-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+.free-map-badge-box i {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+.text-green {
+    color: #28a745 !important;
+}
+
+/* Mock Map SVG Styles */
+.mock-map-wrapper {
+    background: #0d0f12;
+}
+
+.map-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.map-label {
+    fill: #fff;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.route-glow-animation {
+    stroke-dashoffset: 150;
+    animation: dash 5s linear infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Taxi animated element */
+.taxi-car-marker {
+    transition: transform 0.05s linear;
+}
+
+.car-pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        r: 12px;
+        opacity: 1;
+    }
+    100% {
+        r: 22px;
+        opacity: 0;
+    }
+}
+
+/* ==========================================================================
+   Modals
+   ========================================================================== */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    opacity: 1;
+    transition: var(--transition);
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 500px;
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    position: relative;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 28px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-modal-btn:hover {
+    color: #fff;
+}
+
+/* Confirm modal content styles */
+.confirm-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 173, 181, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-blue);
+    margin: 0 auto 15px auto;
+}
+
+.success-icon i {
+    width: 36px;
+    height: 36px;
+}
+
+.confirm-header h2 {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.confirm-header p {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.confirm-body {
+    background: var(--bg-card-sub);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.confirm-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+}
+
+.confirm-detail-row:last-child {
+    border-bottom: none;
+}
+
+.confirm-detail-row span {
+    color: var(--text-muted);
+}
+
+.confirm-detail-row strong {
+    color: var(--text-main);
+}
+
+.confirm-price-row {
+    margin-top: 5px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.confirm-price-row strong {
+    color: var(--primary);
+    font-size: 18px;
+}
+
+/* Settings modal styles */
+.settings-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.settings-header i {
+    color: var(--primary);
+    width: 24px;
+    height: 24px;
+}
+
+.settings-header h2 {
+    font-family: var(--font-title);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.settings-info-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.settings-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.text-danger {
+    color: var(--accent-red);
+}
+
+.text-danger:hover {
+    border-color: var(--accent-red);
+    background: rgba(226, 62, 87, 0.05);
+}
+
+/* ==========================================================================
+   Animations & Classes
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Warning Alert Box for Early Departure Recommendation */
+.warning-alert-box {
+    background: rgba(255, 183, 0, 0.08);
+    border: 1px solid rgba(255, 183, 0, 0.25);
+    border-radius: var(--radius-md);
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.warning-alert-box .warning-icon {
+    color: var(--primary);
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.warning-alert-text {
+    flex-grow: 1;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.warning-alert-text strong {
+    color: var(--primary);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.warning-alert-text p {
+    color: var(--text-muted);
+}
+
+.map-header-badges {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.route-info-badge {
+    background: rgba(0, 173, 181, 0.15);
+    border: 1px solid rgba(0, 173, 181, 0.3);
+    color: var(--accent-blue);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.install-btn {
+    background: rgba(0, 173, 181, 0.15);
+    border: 1px solid rgba(0, 173, 181, 0.3);
+    color: var(--accent-blue);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition);
+}
+
+.install-btn:hover {
+    background: var(--accent-blue);
+    color: #000;
+    box-shadow: 0 0 12px rgba(0, 173, 181, 0.3);
+}
+
+.install-btn i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Viber Bot card styling inside confirmation modal */
+.viber-bot-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    border: 1px solid rgba(123, 79, 187, 0.3);
+    background: rgba(123, 79, 187, 0.05);
+}
+
+.viber-logo {
+    width: 40px;
+    height: 40px;
+    background: #7b4fbb;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.viber-logo i {
+    width: 20px;
+    height: 20px;
+}
+
+.viber-card-text {
+    flex-grow: 1;
+}
+
+.viber-card-text h4 {
+    font-family: var(--font-title);
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.viber-card-text p {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+
+.viber-action-btn {
+    background: #7b4fbb;
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: var(--font-title);
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition);
+}
+
+.viber-action-btn:hover {
+    background: #8e5fd3;
+    box-shadow: 0 0 10px rgba(123, 79, 187, 0.4);
+}
+
+.viber-action-btn i {
+    width: 12px;
+    height: 12px;
+}
+
+/* ==========================================================================
+   Reorganized Layout Styles (Flight Tracker Primary, Booking Secondary)
+   ========================================================================== */
+
+/* Logo Styling */
+.app-logo-img {
+    height: 48px;
+    width: 48px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 10px var(--primary-glow);
+    background: #fff;
+}
+
+/* App Main Layout Container */
+.app-main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Full Width Flight Tracker Card */
+.flight-tracker-card {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.flight-tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.flight-tracker-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.flight-tracker-title h2 {
+    font-family: var(--font-title);
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.flight-tracker-title i {
+    width: 24px;
+    height: 24px;
+}
+
+.flight-tracker-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.flight-tracker-subtitle strong {
+    color: var(--primary);
+}
+
+.flight-search-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.search-flight-btn {
+    flex-shrink: 0;
+    min-width: 180px;
+    justify-content: center;
+}
+
+/* Booking Section Title */
+.booking-section-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-top: 10px;
+}
+
+.booking-section-header h2 {
+    font-family: var(--font-title);
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.booking-section-header h2 i {
+    color: var(--primary);
+}
+
+.booking-section-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Linked Flight info box inside the reservation form */
+.form-flight-info-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    background: rgba(0, 173, 181, 0.08);
+    border: 1px solid rgba(0, 173, 181, 0.2);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+}
+
+.form-flight-info-box i {
+    color: var(--accent-blue);
+    width: 16px;
+    height: 16px;
+}
+
+.form-flight-info-box .info-text {
+    font-size: 13px;
+    color: var(--text-main);
+}
+
+.form-flight-info-box .info-text strong {
+    color: var(--accent-blue);
+    font-family: var(--font-title);
+    margin-left: 4px;
+}
+
+@media (max-width: 768px) {
+    .flight-search-row {
+        flex-direction: column;
+    }
+    
+    .flight-tracker-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+/* Welcome Hero Card */
+.welcome-hero-card {
+    background: linear-gradient(135deg, rgba(26, 32, 44, 0.8), rgba(18, 22, 32, 0.9));
+    border: 1px solid rgba(255, 183, 0, 0.25);
+    padding: 30px 35px;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-hero-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255, 183, 0, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-badge-row {
+    margin-bottom: 15px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 183, 0, 0.15);
+    border: 1px solid rgba(255, 183, 0, 0.3);
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-badge i {
+    width: 14px;
+    height: 14px;
+}
+
+.welcome-hero-card h1 {
+    font-family: var(--font-title);
+    font-size: 34px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: linear-gradient(to right, #fff, #8a99ad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 950px;
+}
+
+.hero-desc strong {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .welcome-hero-card {
+        padding: 20px 25px;
+    }
+    
+    .welcome-hero-card h1 {
+        font-size: 26px;
+    }
+}
+
+/* Promo and Download Card */
+.promo-download-card {
+    margin-top: 24px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.promo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.promo-title-icon {
+    color: var(--primary);
+    width: 20px;
+    height: 20px;
+}
+
+.promo-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--font-title);
+    margin: 0;
+}
+
+.promo-desc {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.promo-buttons-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 480px) {
+    .promo-buttons-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.promo-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.promo-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.promo-btn-icon i {
+    width: 18px;
+    height: 18px;
+}
+
+.promo-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.promo-btn-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.promo-btn-sub {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+/* Viber Promo Style */
+.viber-promo-btn:hover {
+    border-color: #7360f2;
+    background: rgba(115, 96, 242, 0.1);
+    box-shadow: 0 4px 15px rgba(115, 96, 242, 0.15);
+}
+
+.viber-promo-btn:hover .promo-btn-icon {
+    background: #7360f2;
+    color: #fff;
+}
+
+.viber-promo-btn .promo-btn-icon {
+    color: #7360f2;
+}
+
+/* Play Store Promo Style */
+.play-promo-btn:hover {
+    border-color: #3bccff;
+    background: rgba(59, 204, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(59, 204, 255, 0.15);
+}
+
+.play-promo-btn:hover .promo-btn-icon {
+    background: #3bccff;
+    color: #fff;
+}
+
+.play-promo-btn .promo-btn-icon {
+    color: #3bccff;
+}
+
+/* Language Switcher Buttons */
+.lang-switcher {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-title);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.lang-btn.active {
+    background: rgba(255, 183, 0, 0.15);
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: 0 0 10px rgba(255, 183, 0, 0.15);
+}
+
+.lang-btn .flag-icon {
+    font-size: 15px;
+    line-height: 1;
+}
+
+.lang-btn .lang-code {
+    letter-spacing: 0.5px;
+}
+
+/* Modal Promo Download styling */
+.modal-promo-download {
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 183, 0, 0.15);
+    background: rgba(255, 183, 0, 0.02);
+    margin-bottom: 20px;
+}
+
+.modal-promo-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-promo-header i {
+    width: 20px;
+    height: 20px;
+}
+
+.modal-promo-header h4 {
+    font-family: var(--font-title);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.modal-promo-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.modal-promo-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.promo-btn.compact {
+    padding: 8px 12px;
+}
+
+.promo-btn.compact .promo-btn-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.promo-btn.compact .promo-btn-icon i {
+    width: 14px;
+    height: 14px;
+}
+
+.close-tab-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    justify-content: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+.close-tab-hint i {
+    width: 12px;
+    height: 12px;
+    color: var(--primary);
+}

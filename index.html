@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Taxi - Rezervacija & Praćenje Leta</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0c10">
+    <!-- CSS Stilovi -->
+    <link rel="stylesheet" href="style.css?v=3">
+    <!-- Leaflet.js Free Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="logo.png" alt="City Taxi Logo" class="app-logo-img">
+                <div class="logo-text">
+                    <h1>City Taxi</h1>
+                    <p data-i18n="header_subtitle">NS 021 - Praćenje Letova & Transferi</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="install-btn hidden" id="installAppBtn" title="Preuzmi aplikaciju">
+                    <i data-lucide="download"></i>
+                    <span data-i18n="install_app">Preuzmi App</span>
+                </button>
+                <div class="lang-switcher" id="langSwitcher">
+                    <button class="lang-btn active" data-lang="sr" title="Srpski">
+                        <span class="flag-icon">🇷🇸</span>
+                        <span class="lang-code">SR</span>
+                    </button>
+                    <button class="lang-btn" data-lang="en" title="English">
+                        <span class="flag-icon">🇬🇧</span>
+                        <span class="lang-code">EN</span>
+                    </button>
+                    <button class="lang-btn" data-lang="ru" title="Русский">
+                        <span class="flag-icon">🇷🇺</span>
+                        <span class="lang-code">RU</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Glavni Sadržaj -->
+        <main class="app-main">
+            
+            <!-- Welcome Hero Banner -->
+            <div class="welcome-hero-card card glass animate-fade-in">
+                <div class="hero-badge-row">
+                    <span class="hero-badge"><i data-lucide="sparkles"></i> <span data-i18n="hero_badge_text">Powered by City Taxi NS 021</span></span>
+                </div>
+                <h1 data-i18n="hero_title">Track Your Flight & Order Ride</h1>
+                <p class="hero-desc" data-i18n="hero_desc">Ova aplikacija je napravljena da Vam besplatno pomogne u praćenju statusa leta i kašnjenja aviona u realnom vremenu. Projekat je podržan od strane <strong>City Taxi</strong> udruženja kako bi svim putnicima olakšao putovanje i omogućio jednostavnu rezervaciju premium transfera do i od aerodroma.</p>
+            </div>
+
+            <!-- Gornji Panel: Praćenje leta (Pun širina) -->
+            <section class="flight-tracker-card card glass animate-fade-in">
+                <div class="flight-tracker-header">
+                    <div class="flight-tracker-title">
+                        <i data-lucide="plane-takeoff" class="text-yellow"></i>
+                        <h2 data-i18n="tracker_title">Pretraga i Praćenje Statusa Leta</h2>
+                    </div>
+                    <div class="flight-tracker-subtitle" data-i18n="tracker_subtitle">
+                        Podržava <strong>City Taxi NS 021</strong>
+                    </div>
+                </div>
+
+                <div class="flight-search-row">
+                    <div class="input-icon-wrapper flex-grow">
+                        <i data-lucide="plane-landing" class="input-icon-left"></i>
+                        <input type="text" id="flightCode" data-i18n-placeholder="tracker_placeholder" placeholder="UNESITE BROJ LETA (NPR. JU380, LH1411, AA6)" style="text-transform: uppercase;">
+                    </div>
+                    <button type="button" id="checkFlightBtn" class="primary-btn search-flight-btn">
+                        <span data-i18n="search_btn">Proveri status leta</span>
+                        <i data-lucide="search" class="btn-icon"></i>
+                    </button>
+                </div>
+                
+                <p class="input-help" data-i18n="tracker_help">Proverite poletanje, sletanje, kašnjenja u realnom vremenu i vremenske uslove na destinaciji i polazištu.</p>
+
+                <!-- Detalji leta i prognoza (Prikazuje se nakon pretrage) -->
+                <div id="flightWeatherPanel" class="flight-weather-card hidden animate-fade-in">
+                    <div class="flight-panel-header">
+                        <div class="flight-badge" id="flightStatusBadge" data-i18n="status_on_time">Na vreme</div>
+                        <h3 data-i18n="flight_panel_title">Detalji Leta & Vremenska Prognoza</h3>
+                    </div>
+
+                    <div class="flight-info-banner">
+                        <div class="flight-route-visual">
+                            <div class="airport-point">
+                                <span class="airport-code" id="flightDepCode">CDG</span>
+                                <span class="airport-city" id="flightDepCity">Pariz</span>
+                            </div>
+                            <div class="plane-line">
+                                <div class="plane-line-dot"></div>
+                                <i data-lucide="plane"></i>
+                            </div>
+                            <div class="airport-point">
+                                <span class="airport-code" id="flightArrCode">BEG</span>
+                                <span class="airport-city" id="flightArrCity">Beograd</span>
+                            </div>
+                        </div>
+                        <div class="flight-times">
+                            <div><span data-i18n="departure_label">Polazak:</span> <span id="flightDepTime">--:--</span></div>
+                            <div><span data-i18n="arrival_label">Sletanje:</span> <span id="flightArrTime">--:--</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Vremenska prognoza -->
+                    <div class="weather-widgets-grid">
+                        <div class="weather-widget glass-sub">
+                            <div class="widget-label"><span data-i18n="forecast_origin_label">Prognoza u polazištu</span> (<span id="originCityName">Pariz</span>)</div>
+                            <div class="weather-main">
+                                <div class="weather-icon-container" id="originWeatherIcon">
+                                    <i data-lucide="cloud-sun" class="weather-icon"></i>
+                                </div>
+                                <div class="weather-temp" id="originTemp">--°C</div>
+                            </div>
+                            <div class="weather-desc" id="originWeatherDesc" data-i18n="weather_loading">Učitavanje...</div>
+                        </div>
+
+                        <div class="weather-widget glass-sub">
+                            <div class="widget-label" id="begWeatherLabel" data-i18n="forecast_dest_label">Prognoza u Beogradu (Destinacija)</div>
+                            <div class="weather-main">
+                                <div class="weather-icon-container" id="begWeatherIcon">
+                                    <i data-lucide="sun" class="weather-icon text-yellow"></i>
+                                </div>
+                                <div class="weather-temp" id="begTemp">--°C</div>
+                            </div>
+                            <div class="weather-desc" id="begWeatherDesc" data-i18n="weather_loading">Učitavanje...</div>
+                        </div>
+                    </div>
+
+                    <!-- Obaveštenje o kašnjenju -->
+                    <div id="delayNoticeBox" class="delay-notice-box hidden">
+                        <i data-lucide="alert-triangle" class="warning-icon text-red"></i>
+                        <div class="delay-notice-text">
+                            <strong><span data-i18n="delay_title">Let kasni! Detektovano kašnjenje:</span> <span id="delayMinutes">0</span> min</strong>
+                            <p data-i18n="delay_text">Obaveštenje o kašnjenju je poslato dispečeru radi prilagođavanja vožnje.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Booking Section Title -->
+            <div class="booking-section-header">
+                <h2 data-i18n="booking_sec_title"><i data-lucide="taxi"></i> Rezervišite transfer</h2>
+                <p data-i18n="booking_sec_subtitle">Nakon provere leta, rezervišite Premium transfer koji će Vas čekati tačno na vreme</p>
+            </div>
+
+            <!-- Dve kolone: Forma i Mapa -->
+            <div class="app-grid">
+            <!-- Left Column: Booking Form -->
+            <section class="booking-section card glass">
+                <h2 class="section-title"><i data-lucide="calendar-range"></i> <span data-i18n="form_title">Rezervacija vožnje</span></h2>
+                
+                <form id="bookingForm" autocomplete="off">
+                    <!-- Route Selection -->
+                    <div class="form-group">
+                        <label for="routeSelect" data-i18n="route_label">Izaberite relaciju</label>
+                        <div class="select-wrapper">
+                            <select id="routeSelect" required>
+                                <option value="ns-airport" data-i18n="route_ns_airport" selected>Novi Sad ➔ Aerodrom Nikola Tesla (Beograd)</option>
+                                <option value="airport-ns" data-i18n="route_airport_ns">Aerodrom Nikola Tesla (Beograd) ➔ Novi Sad</option>
+                                <option value="ns-bgd" data-i18n="route_ns_bgd">Novi Sad ➔ Beograd (Grad)</option>
+                                <option value="bgd-ns" data-i18n="route_bgd_ns">Beograd (Grad) ➔ Novi Sad</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="select-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Lični podaci putnika -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="passengerName" data-i18n="passenger_name_label">Ime i prezime</label>
+                            <div class="input-icon-wrapper">
+                                <i data-lucide="user" class="input-icon-left"></i>
+                                <input type="text" id="passengerName" data-i18n-placeholder="passenger_name_placeholder" placeholder="Unesite Vaše ime i prezime" required>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label for="passengerPhone" data-i18n="passenger_phone_label">Broj telefona</label>
+                            <div class="input-icon-wrapper">
+                                <i data-lucide="phone" class="input-icon-left"></i>
+                                <input type="text" id="passengerPhone" data-i18n-placeholder="passenger_phone_placeholder" placeholder="Npr. +381 60 123 4567" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Date and Time -->
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="pickupDate" data-i18n="date_label">Datum</label>
+                            <div class="input-icon-wrapper">
+                                <i data-lucide="calendar" class="input-icon-left"></i>
+                                <input type="date" id="pickupDate" required>
+                            </div>
+                        </div>
+                        <div class="form-group col">
+                            <label for="pickupTime" data-i18n="time_label">Vreme preuzimanja</label>
+                            <div class="input-icon-wrapper">
+                                <i data-lucide="clock" class="input-icon-left"></i>
+                                <input type="time" id="pickupTime" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-i18n="vehicle_class_label">Klasa vozila</label>
+                        <div class="vehicle-options">
+                            <label class="vehicle-card active">
+                                <input type="radio" name="vehicleClass" value="standard" checked>
+                                <div class="vehicle-card-content">
+                                    <i data-lucide="car" class="vehicle-icon"></i>
+                                    <span class="vehicle-name" data-i18n="class_standard">Standard</span>
+                                </div>
+                            </label>
+                            <label class="vehicle-card">
+                                <input type="radio" name="vehicleClass" value="business">
+                                <div class="vehicle-card-content">
+                                    <i data-lucide="award" class="vehicle-icon"></i>
+                                    <span class="vehicle-name" data-i18n="class_business">Business</span>
+                                </div>
+                            </label>
+                            <label class="vehicle-card">
+                                <input type="radio" name="vehicleClass" value="van">
+                                <div class="vehicle-card-content">
+                                    <i data-lucide="users" class="vehicle-icon"></i>
+                                    <span class="vehicle-name" data-i18n="class_van">Van</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Povezan let za praćenje (Info) -->
+                    <div id="formFlightInfoBox" class="form-flight-info-box hidden">
+                        <i data-lucide="link" class="info-icon"></i>
+                        <div class="info-text">
+                            <strong data-i18n="linked_flight_label">Povezan let za praćenje:</strong>
+                            <span id="formFlightCodeText">--</span>
+                        </div>
+                    </div>
+
+                    <!-- Warning Alert for Early Departure -->
+                    <div id="earlyDepartureWarning" class="warning-alert-box hidden">
+                        <i data-lucide="alert-triangle" class="warning-icon"></i>
+                        <div class="warning-alert-text">
+                            <strong data-i18n="early_warning_title">Preporuka za raniji polazak!</strong>
+                            <p id="earlyDepartureWarningText" data-i18n="early_warning_desc">Aerodrom traži da budete tamo 2 sata pre poletanja. S obzirom na trajanje puta, preporučujemo da vreme polaska pomerite na ranije kako biste stigli na vreme.</p>
+                        </div>
+                    </div>
+
+                    <!-- Price Card -->
+                    <div class="price-display-card">
+                        <div class="price-info">
+                            <span class="price-label" data-i18n="price_label">Fiksna cena transfera:</span>
+                            <div class="price-amount" id="priceValue">9.000 <span class="currency">RSD</span></div>
+                        </div>
+                        <div class="price-tag-badge" data-i18n="fixed_badge">Fiksno</div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="primary-btn submit-booking-btn">
+                        <span data-i18n="submit_btn">Rezerviši transfer</span>
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Desna kolona: Mapa -->
+            <section class="info-section">
+
+                <!-- Map Card -->
+                <div class="card glass map-card">
+                    <div class="map-card-header">
+                        <h3><i data-lucide="map"></i> <span data-i18n="map_title">Pregled Rute & Praćenje</span></h3>
+                        <div class="map-header-badges">
+                            <span class="route-info-badge hidden" id="routeDurationBadge">Vreme puta: --</span>
+                            <span class="mode-badge" id="mapModeBadge" data-i18n="map_badge_demo">Demo Mapa</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Container for real Google Map or Mock Map -->
+                    <div id="mapContainer" class="map-container-wrapper">
+                        <!-- Leaflet Map Element -->
+                        <div id="leafletMap"></div>
+                        
+                        <!-- Mock Map SVG -->
+                        <div id="mockMap" class="mock-map-wrapper">
+                            <svg viewBox="0 0 800 500" class="map-svg">
+                                <!-- Grid / Background design -->
+                                <defs>
+                                    <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#ffb700" stop-opacity="0.15" />
+                                        <stop offset="100%" stop-color="#ffb700" stop-opacity="0" />
+                                    </radialGradient>
+                                    <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#ff9f00" />
+                                        <stop offset="100%" stop-color="#ffc800" />
+                                    </linearGradient>
+                                </defs>
+                                
+                                <rect width="800" height="500" fill="#0d0f12" />
+                                <!-- Decorative grid lines -->
+                                <path d="M 0 100 L 800 100 M 0 200 L 800 200 M 0 300 L 800 300 M 0 400 L 800 400 M 100 0 L 100 500 M 200 0 L 200 500 M 300 0 L 300 500 M 400 0 L 400 500 M 500 0 L 500 500 M 600 0 L 600 500 M 700 0 L 700 500" stroke="#161a22" stroke-width="1" />
+                                
+                                <!-- Route Path -->
+                                <path id="taxiRoutePath" d="M 150 120 C 220 180, 280 140, 350 260 C 420 380, 520 400, 600 380 L 680 320" fill="none" stroke="#222831" stroke-width="8" stroke-linecap="round" />
+                                <path id="taxiRouteGlow" d="M 150 120 C 220 180, 280 140, 350 260 C 420 380, 520 400, 600 380 L 680 320" fill="none" stroke="url(#routeGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 5" class="route-glow-animation" />
+
+                                <!-- Novi Sad Marker -->
+                                <g transform="translate(150, 120)">
+                                    <circle r="20" fill="url(#mapGlow)" />
+                                    <circle r="8" fill="#ff9f00" />
+                                    <circle r="4" fill="#ffffff" />
+                                    <text y="-15" text-anchor="middle" class="map-label font-title">Novi Sad</text>
+                                </g>
+
+                                <!-- Belgrade / Airport Marker -->
+                                <g id="airportMarker" transform="translate(680, 320)">
+                                    <circle r="25" fill="url(#mapGlow)" />
+                                    <circle r="10" fill="#00adb5" />
+                                    <path d="M-5 -2 L 5 -2 L 0 5 Z" fill="#ffffff" transform="rotate(45)" />
+                                    <text y="-18" text-anchor="middle" class="map-label font-title" id="destinationLabel">Aerodrom</text>
+                                </g>
+
+                                <!-- Belgrade City Marker (Alternate) -->
+                                <g id="belgradeCityMarker" transform="translate(640, 420)" class="hidden">
+                                    <circle r="20" fill="url(#mapGlow)" />
+                                    <circle r="8" fill="#e23e57" />
+                                    <circle r="4" fill="#ffffff" />
+                                    <text y="-15" text-anchor="middle" class="map-label font-title">Beograd (Centar)</text>
+                                </g>
+
+                                <!-- Car / Taxi Marker (Animated along path) -->
+                                <g id="taxiCarMarker" transform="translate(150, 120)" class="taxi-car-marker hidden">
+                                    <circle r="12" fill="#ffc800" class="car-pulse" />
+                                    <path d="M -7 -4 L 7 -4 L 5 4 L -5 4 Z" fill="#000000" />
+                                    <rect x="-3" y="-6" width="6" height="2" fill="#ffc800" />
+                                    <circle cx="-4" cy="4" r="2.5" fill="#555" />
+                                    <circle cx="4" cy="4" r="2.5" fill="#555" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promo & Download Card -->
+                <div class="card glass promo-download-card">
+                    <div class="promo-header">
+                        <i data-lucide="sparkles" class="promo-title-icon"></i>
+                        <h3 data-i18n="promo_title">City Taxi Benefiti</h3>
+                    </div>
+                    <p class="promo-desc" data-i18n="promo_desc">Iskoristite dodatne pogodnosti tokom boravka u Novom Sadu:</p>
+                    <div class="promo-buttons-container">
+                        <!-- Viber Bot Link -->
+                        <a href="https://citytaxins.rs/viber/" target="_blank" class="promo-btn viber-promo-btn">
+                            <div class="promo-btn-icon">
+                                <i data-lucide="message-square"></i>
+                            </div>
+                            <div class="promo-btn-text">
+                                <span class="promo-btn-label" data-i18n="viber_btn_label">Viber Bot</span>
+                                <span class="promo-btn-sub" data-i18n="viber_btn_sub">Poruči preko Vibera</span>
+                            </div>
+                        </a>
+                        
+                        <!-- Mobile App Link -->
+                        <a href="https://play.google.com/store/search?q=city%20taxi&c=apps" target="_blank" class="promo-btn play-promo-btn">
+                            <div class="promo-btn-icon">
+                                <i data-lucide="smartphone"></i>
+                            </div>
+                            <div class="promo-btn-text">
+                                <span class="promo-btn-label" data-i18n="app_btn_label">Mobilna App</span>
+                                <span class="promo-btn-sub" data-i18n="app_btn_sub">Preuzmi na Google Play</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Booking Confirmation Modal -->
+        <div id="confirmationModal" class="modal hidden">
+            <div class="modal-content glass animate-slide-up">
+                <button class="close-modal-btn" id="closeConfirmBtn">&times;</button>
+                <div class="confirm-header">
+                    <div class="success-icon">
+                        <i data-lucide="check-circle-2"></i>
+                    </div>
+                    <h2 data-i18n="conf_success_title">Uspešna Rezervacija!</h2>
+                    <p><span data-i18n="conf_order_label">Broj porudžbine:</span> <span id="confOrderId" style="color: var(--primary); font-weight: 700; font-family: var(--font-title);">#TX-xxxx</span></p>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px;" data-i18n="conf_success_desc">Vaš transfer je potvrđen i poslat u City Taxi dispečerski centar.</p>
+                </div>
+                <div class="confirm-body">
+                    <div class="confirm-detail-row">
+                        <span data-i18n="conf_route_label">Relacija:</span>
+                        <strong id="confRoute">Novi Sad ➔ Aerodrom Nikola Tesla</strong>
+                    </div>
+                    <div class="confirm-detail-row">
+                        <span data-i18n="conf_name_label">Klijent:</span>
+                        <strong id="confName">--</strong>
+                    </div>
+                    <div class="confirm-detail-row">
+                        <span data-i18n="conf_phone_label">Broj telefona:</span>
+                        <strong id="confPhone">--</strong>
+                    </div>
+                    <div class="confirm-detail-row">
+                        <span data-i18n="conf_datetime_label">Datum i vreme:</span>
+                        <strong id="confDateTime">08.07.2026. u 20:00</strong>
+                    </div>
+                    <div class="confirm-detail-row" id="confFlightRow">
+                        <span data-i18n="conf_flight_label">Let za praćenje:</span>
+                        <strong id="confFlightCode">--</strong>
+                    </div>
+                    <div class="confirm-detail-row">
+                        <span data-i18n="conf_vehicle_label">Klasa vozila:</span>
+                        <strong id="confVehicle">Standard</strong>
+                    </div>
+                    <div class="confirm-detail-row confirm-price-row">
+                        <span data-i18n="conf_price_label">Ukupna cena:</span>
+                        <strong id="confPrice">9.000 RSD</strong>
+                    </div>
+                </div>
+                
+                <!-- Promo Download Section inside Confirmation Modal -->
+                <div class="modal-promo-download glass-sub">
+                    <div class="modal-promo-header">
+                        <i data-lucide="smartphone" class="text-yellow"></i>
+                        <h4 data-i18n="conf_download_title">Download our App & Viber Bot</h4>
+                    </div>
+                    <p class="modal-promo-desc" data-i18n="conf_download_desc">For easier and faster ride ordering in Novi Sad, download our mobile app or use our Viber Bot. You can now safely close this tab.</p>
+                    
+                    <div class="modal-promo-buttons">
+                        <!-- Viber Bot Button -->
+                        <a href="https://citytaxins.rs/viber/" target="_blank" class="promo-btn viber-promo-btn compact">
+                            <div class="promo-btn-icon"><i data-lucide="message-square"></i></div>
+                            <div class="promo-btn-text">
+                                <span class="promo-btn-label" data-i18n="conf_viber_btn_label">Viber Bot</span>
+                            </div>
+                        </a>
+                        
+                        <!-- Mobile App Button -->
+                        <a href="https://play.google.com/store/search?q=city%20taxi&c=apps" target="_blank" class="promo-btn play-promo-btn compact">
+                            <div class="promo-btn-icon"><i data-lucide="smartphone"></i></div>
+                            <div class="promo-btn-text">
+                                <span class="promo-btn-label" data-i18n="conf_app_btn_label">Mobilna App</span>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="close-tab-hint">
+                        <i data-lucide="info"></i>
+                        <span data-i18n="conf_close_tab_hint">Nakon preuzimanja možete zatvoriti ovaj tab.</span>
+                    </div>
+                </div>
+                <button type="button" id="startTripSimulationBtn" class="primary-btn">
+                    <span data-i18n="conf_sim_btn">Započni simulaciju vožnje</span>
+                    <i data-lucide="play"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Modal (API Keys) -->
+        <div id="settingsModal" class="modal hidden">
+            <div class="modal-content glass animate-slide-up">
+                <button class="close-modal-btn" id="closeSettingsBtn">&times;</button>
+                <div class="settings-header">
+                    <i data-lucide="sliders"></i>
+                    <h2>Podešavanja API Ključeva</h2>
+                </div>
+                <div class="settings-body">
+                    <p class="settings-info-text">Unesite svoje API ključeve kako biste prešli sa Demo režima na podatke u realnom vremenu.</p>
+                    
+                    <div class="form-group">
+                        <label>Mapa & Rute (Besplatno / OpenStreetMap)</label>
+                        <div class="free-map-badge-box">
+                            <i data-lucide="check-circle" class="text-green"></i>
+                            <span>Mapa i proračun ruta rade preko besplatnog OpenStreetMap API-ja (nije potreban ključ).</span>
+                        </div>
+                     </div>
+
+                    <div class="form-group">
+                        <label for="airLabsKeyInput">AirLabs API Key</label>
+                        <input type="password" id="airLabsKeyInput" placeholder="Upišite AirLabs ključ...">
+                        <p class="input-help">Omogućava praćenje stvarnih letova na nebu.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rapidApiKeyInput">RapidAPI Key (AeroDataBox)</label>
+                        <input type="password" id="rapidApiKeyInput" placeholder="Upišite RapidAPI ključ...">
+                        <p class="input-help">Alternativni besplatni API za pretragu letova.</p>
+                    </div>
+
+                    <div class="settings-actions">
+                        <button type="button" id="clearKeysBtn" class="secondary-btn text-danger">Obriši ključeve</button>
+                        <button type="button" id="saveKeysBtn" class="primary-btn">Sačuvaj podešavanja</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet.js Free Maps JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- App JavaScript Logic -->
+    <script src="app.js?v=7"></script>
+</body>
+</html>

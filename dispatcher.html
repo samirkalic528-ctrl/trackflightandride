@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Taxi - Dispečerski Panel</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --bg-card: rgba(18, 22, 32, 0.7);
+            --bg-card-sub: rgba(28, 35, 51, 0.5);
+            --primary: #ffb700;
+            --primary-hover: #e5a400;
+            --primary-glow: rgba(255, 183, 0, 0.25);
+            --secondary: #1a202c;
+            --text-main: #f0f4f8;
+            --text-muted: #8a99ad;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-blue: #00adb5;
+            --accent-red: #e23e57;
+            --accent-green: #2ecc71;
+            --font-body: 'Inter', sans-serif;
+            --font-title: 'Outfit', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            padding: 30px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(123, 79, 187, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 183, 0, 0.04) 0px, transparent 50%);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 35px;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        .logo-text h1 {
+            font-family: var(--font-title);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-text h1 span {
+            color: var(--primary);
+        }
+
+        .logo-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .refresh-btn {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .status-indicator {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dot-pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.5; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+
+        /* Grid Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-info h3 {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-info .stat-value {
+            font-family: var(--font-title);
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-blue { background: rgba(0, 173, 181, 0.1); color: var(--accent-blue); }
+        .icon-yellow { background: rgba(255, 183, 0, 0.1); color: var(--primary); }
+        .icon-green { background: rgba(46, 204, 113, 0.1); color: var(--accent-green); }
+        .icon-red { background: rgba(226, 62, 87, 0.1); color: var(--accent-red); }
+
+        /* Main Panel Display */
+        .panel-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+            min-height: 450px;
+        }
+
+        .panel-title {
+            font-family: var(--font-title);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title i {
+            color: var(--primary);
+        }
+
+        /* Bookings Table */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .bookings-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .bookings-table th {
+            padding: 14px 18px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bookings-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .bookings-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .order-id {
+            font-family: var(--font-title);
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .client-info strong {
+            display: block;
+            color: #fff;
+        }
+
+        .client-info span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .route-info strong {
+            display: block;
+            color: #fff;
+        }
+
+        .route-info span {
+            font-size: 11px;
+            color: var(--accent-blue);
+            background: rgba(0, 173, 181, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .flight-badge {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .flight-badge.delayed {
+            border-color: rgba(226, 62, 87, 0.4);
+            background: rgba(226, 62, 87, 0.08);
+            color: var(--accent-red);
+        }
+
+        .flight-badge.ontime {
+            border-color: rgba(46, 204, 113, 0.4);
+            background: rgba(46, 204, 113, 0.08);
+            color: var(--accent-green);
+        }
+
+        .price-text {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Status Dropdown Selector */
+        .status-select {
+            background: var(--bg-card-sub);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .status-select:focus {
+            border-color: var(--primary);
+        }
+
+        .status-pending { color: #f39c12; border-color: rgba(243, 156, 18, 0.3); }
+        .status-assigned { color: var(--accent-blue); border-color: rgba(0, 173, 181, 0.3); }
+        .status-completed { color: var(--accent-green); border-color: rgba(46, 204, 113, 0.3); }
+        .status-cancelled { color: var(--accent-red); border-color: rgba(226, 62, 87, 0.3); }
+
+        /* Action Buttons */
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-call,
+        .btn-copy {
+            border: 1px solid var(--border-color);
+            background: var(--bg-card-sub);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-call:hover {
+            background: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #000;
+        }
+
+        .btn-copy:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #000;
+        }
+
+        .btn-call i, .btn-copy i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 40px !important;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dash-header">
+            <div class="logo-group">
+                <img src="logo.png" alt="City Taxi Logo" style="height: 48px; width: 48px; object-fit: contain; border-radius: 50%; border: 2px solid var(--primary); background: #fff; box-shadow: 0 0 10px var(--primary-glow);">
+                <div class="logo-text">
+                    <h1>City Taxi Dispatch</h1>
+                    <p>NS 021 - Kontrolni panel za vožnje i letove</p>
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="status-indicator">
+                    <span class="dot-pulse"></span>
+                    <span>Server Aktivan</span>
+                </div>
+                <button class="refresh-btn" id="refreshBtn">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Osveži</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Counter Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Ukupno porudžbina</h3>
+                    <div class="stat-value" id="statTotal">0</div>
+                </div>
+                <div class="stat-icon icon-blue">
+                    <i data-lucide="list-todo"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Aktivne (Na čekanju)</h3>
+                    <div class="stat-value" id="statPending">0</div>
+                </div>
+                <div class="stat-icon icon-yellow">
+                    <i data-lucide="clock"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Dodeljene vozaču</h3>
+                    <div class="stat-value" id="statAssigned">0</div>
+                </div>
+                <div class="stat-icon icon-green">
+                    <i data-lucide="user-check"></i>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Kašnjenja letova</h3>
+                    <div class="stat-value" id="statDelays">0</div>
+                </div>
+                <div class="stat-icon icon-red">
+                    <i data-lucide="plane-takeoff"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Panel -->
+        <div class="panel-card">
+            <div class="panel-title">
+                <i data-lucide="table"></i>
+                <h2>Sve rezervacije klijenata</h2>
+            </div>
+            <div class="table-responsive">
+                <table class="bookings-table">
+                    <thead>
+                        <tr>
+                            <th>ID Porudžbine</th>
+                            <th>Klijent</th>
+                            <th>Relacija</th>
+                            <th>Datum i Vreme</th>
+                            <th>Praćenje Leta</th>
+                            <th>Cena</th>
+                            <th>Status</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingsTableBody">
+                        <tr>
+                            <td colspan="8" class="empty-row">Učitavanje podataka...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Load bookings immediately
+            loadBookings();
+
+            // Refresh button click
+            document.getElementById("refreshBtn").addEventListener("click", () => {
+                loadBookings();
+            });
+
+            // Auto-refresh every 15 seconds
+            setInterval(loadBookings, 15000);
+
+            // Render initial Lucide icons
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+
+        // ==========================================================================
+        // Load Bookings Data from API
+        // ==========================================================================
+        function loadBookings() {
+            const tableBody = document.getElementById("bookingsTableBody");
+            const refreshBtn = document.getElementById("refreshBtn");
+            
+            // Add spinning animation to refresh icon
+            refreshBtn.querySelector("i").classList.add("spinner");
+
+            fetch('http://localhost:3000/api/bookings')
+                .then(res => res.json())
+                .then(data => {
+                    renderBookingsTable(data);
+                    calculateStats(data);
+                })
+                .catch(err => {
+                    console.error("Greška pri učitavanju rezervacija sa servera:", err);
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="empty-row" style="color: var(--accent-red);">
+                                Greška pri povezivanju sa dispečerskim serverom. Proverite da li je server.js pokrenut!
+                            </td>
+                        </tr>
+                    `;
+                })
+                .finally(() => {
+                    refreshBtn.querySelector("i").classList.remove("spinner");
+                    if (window.lucide) lucide.createIcons();
+                });
+        }
+
+        // ==========================================================================
+        // Render Bookings in HTML Table
+        // ==========================================================================
+        function renderBookingsTable(bookings) {
+            const tableBody = document.getElementById("bookingsTableBody");
+            
+            if (bookings.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-row">Nema evidentiranih porudžbina u bazi.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            bookings.forEach(booking => {
+                // Determine flight badge styling
+                let flightHtml = '<span class="text-muted">Nema</span>';
+                if (booking.flightCode) {
+                    if (booking.delay > 0) {
+                        flightHtml = `<span class="flight-badge delayed">✈️ ${booking.flightCode} (Kasni +${booking.delay}m)</span>`;
+                    } else {
+                        flightHtml = `<span class="flight-badge ontime">✈️ ${booking.flightCode} (Na vreme)</span>`;
+                    }
+                }
+
+                // Determine vehicle class styling
+                let vehicleClassLabel = booking.vehicleClass.toUpperCase();
+
+                // Select current status class
+                let statusClass = 'status-pending';
+                if (booking.status === 'Dodeljeno vozaču') statusClass = 'status-assigned';
+                if (booking.status === 'Završeno') statusClass = 'status-completed';
+                if (booking.status === 'Otkazano') statusClass = 'status-cancelled';
+
+                html += `
+                    <tr id="row-${booking.id}">
+                        <td class="order-id">${booking.id}</td>
+                        <td>
+                            <div class="client-info">
+                                <strong>${booking.name}</strong>
+                                <span>${booking.phone}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="route-info">
+                                <strong>${booking.route}</strong>
+                                <span>Kategorija: ${vehicleClassLabel}</span>
+                            </div>
+                        </td>
+                        <td>${booking.dateTime}</td>
+                        <td>${flightHtml}</td>
+                        <td class="price-text">${booking.price}</td>
+                        <td>
+                            <select class="status-select ${statusClass}" onchange="changeBookingStatus('${booking.id}', this.value)">
+                                <option value="Na čekanju" ${booking.status === 'Na čekanju' ? 'selected' : ''}>Na čekanju</option>
+                                <option value="Dodeljeno vozaču" ${booking.status === 'Dodeljeno vozaču' ? 'selected' : ''}>Dodeljeno vozaču</option>
+                                <option value="Završeno" ${booking.status === 'Završeno' ? 'selected' : ''}>Završeno</option>
+                                <option value="Otkazano" ${booking.status === 'Otkazano' ? 'selected' : ''}>Otkazano</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="action-cell">
+                                <a href="tel:${booking.phone}" class="btn-call" title="Pozovi klijenta">
+                                    <i data-lucide="phone"></i>
+                                    <span>Pozovi</span>
+                                </a>
+                                <button class="btn-copy" onclick="copyToClipboard('${escapeHtml(JSON.stringify(booking))}')" title="Kopiraj podatke za vozača">
+                                    <i data-lucide="copy"></i>
+                                    <span>Kopiraj</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+        }
+
+        // ==========================================================================
+        // Update Stats Counters
+        // ==========================================================================
+        function calculateStats(bookings) {
+            document.getElementById("statTotal").textContent = bookings.length;
+            
+            const pending = bookings.filter(b => b.status === "Na čekanju").length;
+            document.getElementById("statPending").textContent = pending;
+
+            const assigned = bookings.filter(b => b.status === "Dodeljeno vozaču").length;
+            document.getElementById("statAssigned").textContent = assigned;
+
+            const delays = bookings.filter(b => b.flightCode && b.delay > 0).length;
+            document.getElementById("statDelays").textContent = delays;
+        }
+
+        // ==========================================================================
+        // Change Status of Booking
+        // ==========================================================================
+        function changeBookingStatus(id, newStatus) {
+            fetch(`http://localhost:3000/api/booking/${id}/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(`Uspeno ažuriran status za ${id}`);
+                    // Reload statistics and update colors
+                    const selectEl = document.querySelector(`#row-${id} .status-select`);
+                    selectEl.className = 'status-select'; // reset
+                    
+                    let statusClass = 'status-pending';
+                    if (newStatus === 'Dodeljeno vozaču') statusClass = 'status-assigned';
+                    if (newStatus === 'Završeno') statusClass = 'status-completed';
+                    if (newStatus === 'Otkazano') statusClass = 'status-cancelled';
+                    
+                    selectEl.classList.add(statusClass);
+                    
+                    // Reload data in background to refresh counts
+                    fetch('http://localhost:3000/api/bookings')
+                        .then(res => res.json())
+                        .then(calculateStats);
+                } else {
+                    alert('Greška pri izmeni statusa: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Server nije dostupan pri promeni statusa.');
+            });
+        }
+
+        // ==========================================================================
+        // Copy Format text for Driver (to clipboard)
+        // ==========================================================================
+        function copyToClipboard(bookingJsonStr) {
+            const booking = JSON.parse(bookingJsonStr);
+            
+            let driverText = `🚖 *CITY TAXI - NALOG ZA VOŽNJU* 🚖\n`;
+            driverText += `-------------------------------------\n`;
+            driverText += `📌 *BROJ VOŽNJE:* ${booking.id}\n`;
+            driverText += `👤 *KLIJENT:* ${booking.name}\n`;
+            driverText += `📞 *TELEFON:* ${booking.phone}\n`;
+            driverText += `📍 *RELACIJA:* ${booking.route}\n`;
+            driverText += `🕒 *VREME POLASKA:* ${booking.dateTime}\n`;
+            driverText += `🚗 *KLASA VOZILA:* ${booking.vehicleClass.toUpperCase()}\n`;
+            driverText += `💰 *CENA:* ${booking.price}\n`;
+
+            if (booking.flightCode) {
+                driverText += `✈️ *BROJ LETA:* ${booking.flightCode}\n`;
+                if (booking.delay > 0) {
+                    driverText += `⚠️ *LET KASNI:* +${booking.delay} minuta!\n`;
+                    driverText += `⏰ *PRILAGOĐENO VREME:* ${booking.newSuggestedTime}\n`;
+                } else {
+                    driverText += `✅ *STATUS LETA:* Na vreme\n`;
+                }
+            }
+            driverText += `-------------------------------------\n`;
+            driverText += `Prijatnu vožnju želi vam City Taxi!`;
+
+            // Copy using Navigator clipboard
+            navigator.clipboard.writeText(driverText)
+                .then(() => {
+                    alert(`Podaci za vožnju ${booking.id} su uspešno kopirani. Možete ih poslati vozaču na Viber!`);
+                })
+                .catch(err => {
+                    console.error('Greška pri kopiranju:', err);
+                    alert('Nije uspelo kopiranje podataka.');
+                });
+        }
+
+        // Helper to escape HTML tags in JSON string parameters
+        function escapeHtml(string) {
+            return string
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "short_name": "City Taxi",
+  "name": "City Taxi - Rezervacija & Praćenje Leta",
+  "description": "Premium taxi transferi iz Novog Sada sa praćenjem leta i kašnjenja aviona.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0c10",
+  "theme_color": "#0a0c10",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
